@@ -185,3 +185,18 @@
 [Thu Nov  5 00:20:28 2026] 127.0.0.1:34934 Accepted
 [Thu Nov  5 00:20:28 2026] 127.0.0.1:34934 [200]: GET /patients/view_patient.php?id=1
 [Thu Nov  5 00:20:28 2026] 127.0.0.1:34934 Closing
+[Thu Nov  5 00:30:18 2026] 127.0.0.1:57458 Accepted
+[Thu Nov  5 00:30:23 2026] 127.0.0.1:57458 [200]: GET /reports/monthly_report.php
+[Thu Nov  5 00:30:23 2026] 127.0.0.1:57458 Closing
+[Thu Nov  5 00:30:26 2026] 127.0.0.1:57466 Accepted
+[Thu Nov  5 00:30:27 2026] 127.0.0.1:57466 [302]: GET /favicon.ico
+[Thu Nov  5 00:30:27 2026] 127.0.0.1:57466 Closing
+[Thu Nov  5 00:30:27 2026] 127.0.0.1:57482 Accepted
+[Thu Nov  5 00:30:27 2026] 127.0.0.1:57482 [200]: GET /dashboard/index.php
+[Thu Nov  5 00:30:27 2026] 127.0.0.1:57482 Closing
+[Thu Nov  5 00:30:31 2026] 127.0.0.1:46806 Accepted
+[Thu Nov  5 00:30:31 2026] 127.0.0.1:46806 [200]: GET /dashboard/index.php
+[Thu Nov  5 00:30:31 2026] 127.0.0.1:46806 Closing
+[Thu Nov  5 00:30:32 2026] 127.0.0.1:46820 Accepted
+[Thu Nov  5 00:30:32 2026] 127.0.0.1:46820 [200]: GET /assets/css/style.css
+[Thu Nov  5 00:30:32 2026] 127.0.0.1:46820 Closing

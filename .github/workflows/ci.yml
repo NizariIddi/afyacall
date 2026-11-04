@@ -10,7 +10,7 @@ env:
   DB_HOST: 127.0.0.1
   DB_PORT: 3306
   DB_USER: root
-  DB_PASSWORD: ""
+  DB_PASSWORD: rootpass
   DB_NAME: afyacall
 
 jobs:
@@ -19,11 +19,12 @@ jobs:
 
     services:
       mariadb:
-        image: mariadb:11.8
+        image: mariadb:11
         env:
-          MARIADB_ROOT_PASSWORD: ""
+          MARIADB_ROOT_PASSWORD: rootpass
+          MARIADB_DATABASE: afyacall
         options: >-
-          --health-cmd "mysqladmin ping -h 127.0.0.1 -P 3306 --silent"
+          --health-cmd "mysqladmin ping -h 127.0.0.1 -P 3306 -p rootpass --silent"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 20
@@ -46,12 +47,19 @@ jobs:
           php -v
           php -m | grep -Ei 'mysqli|pdo_mysql'
 
-      - name: Create database and import schema
+      - name: Wait for MariaDB and create database
         run: |
-          mysql -h 127.0.0.1 -P 3306 -u root "${{ env.DB_NAME }}" -e "SELECT 1" 2>/dev/null || \
-          mysql -h 127.0.0.1 -P 3306 -u root -e "CREATE DATABASE ${{ env.DB_NAME }} CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"
-          mysql -h 127.0.0.1 -P 3306 -u root "${{ env.DB_NAME }}" < database.sql
-          mysql -h 127.0.0.1 -P 3306 -u root "${{ env.DB_NAME }}" -e "SHOW TABLES;"
+          for i in $(seq 1 30); do
+            if mysqladmin ping -h 127.0.0.1 -P 3306 -u root -p rootpass --silent 2>/dev/null; then
+              echo "MariaDB is ready"
+              break
+            fi
+            echo "Waiting for MariaDB... ($i/30)"
+            sleep 2
+          done
+          mysql -h 127.0.0.1 -P 3306 -u root -p rootpass -e "CREATE DATABASE IF NOT EXISTS afyacall CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"
+          mysql -h 127.0.0.1 -P 3306 -u root -p rootpass afyacall < database.sql
+          mysql -h 127.0.0.1 -P 3306 -u root -p rootpass afyacall -e "SHOW TABLES;"
 
       - name: PHP syntax check (lint all PHP files)
         run: |
