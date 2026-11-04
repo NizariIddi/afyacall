@@ -1,10 +1,11 @@
+
 name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 env:
   DB_HOST: 127.0.0.1
@@ -23,18 +24,21 @@ jobs:
         env:
           MARIADB_ROOT_PASSWORD: rootpass
           MARIADB_DATABASE: afyacall
+        ports:
+          - 3306:3306
         options: >-
-          --health-cmd "mysqladmin ping --silent"
+          --health-cmd "healthcheck.sh --connect --innodb_initialized"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 30
-        ports:
-          - 3306:3306
+          --health-start-period 30s
 
     steps:
+      # 1. Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2. Set up PHP
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -42,54 +46,131 @@ jobs:
           extensions: mysqli, pdo_mysql
           coverage: none
 
+      # 3. Verify PHP installation
       - name: Verify PHP version and extensions
         run: |
           php -v
           php -m | grep -Ei 'mysqli|pdo_mysql'
 
+      # 4. Wait for MariaDB and import database schema
       - name: Wait for MariaDB and import schema
         run: |
           for i in $(seq 1 60); do
-            if mysqladmin ping -h 127.0.0.1 -P 3306 -u root -p rootpass --silent 2>/dev/null; then
+            if mysqladmin ping \
+              -h "$DB_HOST" \
+              -P "$DB_PORT" \
+              -u "$DB_USER" \
+              --password="$DB_PASSWORD" \
+              --silent 2>/dev/null; then
               echo "MariaDB is ready"
               break
             fi
+
+            if [ "$i" -eq 60 ]; then
+              echo "MariaDB failed to become ready"
+              exit 1
+            fi
+
             echo "Waiting for MariaDB... ($i/60)"
             sleep 2
           done
-          mysql -h 127.0.0.1 -P 3306 -u root -p rootpass -e "CREATE DATABASE IF NOT EXISTS afyacall CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"
-          mysql -h 127.0.0.1 -P 3306 -u root -p rootpass afyacall < database.sql
-          mysql -h 127.0.0.1 -P 3306 -u root -p rootpass afyacall -e "SHOW TABLES;"
 
-      - name: PHP syntax check (lint all PHP files)
+          echo "Importing database schema..."
+
+          mysql \
+            -h "$DB_HOST" \
+            -P "$DB_PORT" \
+            -u "$DB_USER" \
+            --password="$DB_PASSWORD" \
+            "$DB_NAME" < database.sql
+
+          echo "Verifying database tables..."
+
+          mysql \
+            -h "$DB_HOST" \
+            -P "$DB_PORT" \
+            -u "$DB_USER" \
+            --password="$DB_PASSWORD" \
+            "$DB_NAME" \
+            -e "SHOW TABLES;"
+
+          echo "Database setup completed successfully"
+
+      # 5. Lint all PHP files
+      - name: PHP syntax check
         run: |
-          find . -name '*.php' -not -path './vendor/*' -print0 | \
-            xargs -0 -I{} sh -c 'php -l "{}" > /dev/null || { echo "❌ Lint failed: {}"; exit 1; }'
-          echo "✅ All PHP files pass lint"
+          find . -name '*.php' \
+            -not -path './vendor/*' \
+            -print0 | \
+            xargs -0 -I{} sh -c '
+              php -l "$1" > /dev/null || {
+                echo "Lint failed: $1"
+                exit 1
+              }
+            ' _ {}
 
+          echo "All PHP files pass syntax checks"
+
+      # 6. Start PHP built-in server
       - name: Start PHP built-in server
         run: |
-          php -S 127.0.0.1:8000 -t . > /tmp/php_server.log 2>&1 &
-          echo $! > /tmp/php_server.pid
-          sleep 2
-          cat /tmp/php_server.log
+          php -S 127.0.0.1:8000 -t . \
+            > /tmp/php_server.log 2>&1 &
 
+          echo $! > /tmp/php_server.pid
+
+          for i in $(seq 1 10); do
+            if curl -s http://127.0.0.1:8000/index.php > /dev/null; then
+              echo "PHP server is running"
+              break
+            fi
+
+            if [ "$i" -eq 10 ]; then
+              echo "PHP server failed to start"
+              cat /tmp/php_server.log
+              exit 1
+            fi
+
+            sleep 1
+          done
+
+      # 7. Test application endpoints
       - name: Smoke test endpoints
         run: |
-          echo "=== GET /index.php (landing) ==="
-          code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8000/index.php)
-          echo "HTTP $code"; [ "$code" = "200" ]
+          set -e
 
-          echo "=== GET /auth/login.php (login page / DB connection) ==="
-          code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8000/auth/login.php)
-          echo "HTTP $code"; [ "$code" = "200" ]
+          echo "=== GET /index.php (landing page) ==="
 
-          echo "=== GET /dashboard/index.php (no session -> redirect) ==="
-          code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8000/dashboard/index.php)
-          echo "HTTP $code"; [ "$code" = "302" ]
+          code=$(curl -s -o /dev/null \
+            -w "%{http_code}" \
+            http://127.0.0.1:8000/index.php)
 
-          echo "=== All smoke tests passed ==="
+          echo "HTTP $code"
+          [ "$code" = "200" ]
 
+          echo "=== GET /auth/login.php (login page) ==="
+
+          code=$(curl -s -o /dev/null \
+            -w "%{http_code}" \
+            http://127.0.0.1:8000/auth/login.php)
+
+          echo "HTTP $code"
+          [ "$code" = "200" ]
+
+          echo "=== GET /dashboard/index.php (unauthenticated redirect) ==="
+
+          code=$(curl -s -o /dev/null \
+            -w "%{http_code}" \
+            http://127.0.0.1:8000/dashboard/index.php)
+
+          echo "HTTP $code"
+          [ "$code" = "302" ]
+
+          echo "All smoke tests passed!"
+
+      # 8. Display server logs if something fails
       - name: Show server log on failure
         if: failure()
-        run: cat /tmp/php_server.log || true
+        run: |
+          echo "=== PHP Server Logs ==="
+          cat /tmp/php_server.log || true
