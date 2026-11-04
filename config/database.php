@@ -1,20 +1,30 @@
+
 <?php
 
 // AfyaCall database connection.
-// NOTE: The system MariaDB root account uses unix_socket auth and is not
-// reachable from this (non-root) OS user, so the app connects to a local
-// MariaDB instance running on 127.0.0.1:3307 (started separately as the
-// current user). See setup notes for how that instance was created.
-$host = "127.0.0.1";
-$user = "root";
-$password = "";
-$database = "afyacall";
-$port = 3307;
+// Uses environment variables when available (e.g. GitHub Actions).
+// Otherwise, falls back to local Fedora MariaDB settings.
 
-$conn = mysqli_connect($host, $user, $password, $database, $port);
+$host = getenv('DB_HOST') ?: '127.0.0.1';
+$user = getenv('DB_USER') ?: 'root';
+$password = getenv('DB_PASSWORD') !== false
+    ? getenv('DB_PASSWORD')
+    : '';
+$database = getenv('DB_NAME') ?: 'afyacall';
+$port = (int) (getenv('DB_PORT') ?: 3307);
+
+$conn = mysqli_connect(
+    $host,
+    $user,
+    $password,
+    $database,
+    $port
+);
 
 if (!$conn) {
     die("Database connection failed: " . mysqli_connect_error());
 }
+
+mysqli_set_charset($conn, "utf8mb4");
 
 ?>
