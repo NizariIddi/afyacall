@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  DB_HOST: 127.0.0.1
+  DB_PORT: 3306
+  DB_USER: root
+  DB_PASSWORD: ""
+  DB_NAME: afyacall
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mariadb:
+        image: mariadb:11.8
+        env:
+          MARIADB_ROOT_PASSWORD: ""
+        options: >-
+          --health-cmd "mysqladmin ping -h 127.0.0.1 -P 3306 --silent"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 20
+        ports:
+          - 3306:3306
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: mysqli, pdo_mysql
+          coverage: none
+
+      - name: Verify PHP version and extensions
+        run: |
+          php -v
+          php -m | grep -Ei 'mysqli|pdo_mysql'
+
+      - name: Create database and import schema
+        run: |
+          mysql -h 127.0.0.1 -P 3306 -u root "${{ env.DB_NAME }}" -e "SELECT 1" 2>/dev/null || \
+          mysql -h 127.0.0.1 -P 3306 -u root -e "CREATE DATABASE ${{ env.DB_NAME }} CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"
+          mysql -h 127.0.0.1 -P 3306 -u root "${{ env.DB_NAME }}" < database.sql
+          mysql -h 127.0.0.1 -P 3306 -u root "${{ env.DB_NAME }}" -e "SHOW TABLES;"
+
+      - name: PHP syntax check (lint all PHP files)
+        run: |
+          find . -name '*.php' -not -path './vendor/*' -print0 | \
+            xargs -0 -I{} sh -c 'php -l "{}" > /dev/null || { echo "❌ Lint failed: {}"; exit 1; }'
+          echo "✅ All PHP files pass lint"
+
+      - name: Start PHP built-in server
+        run: |
+          php -S 127.0.0.1:8000 -t . > /tmp/php_server.log 2>&1 &
+          echo $! > /tmp/php_server.pid
+          sleep 2
+          cat /tmp/php_server.log
+
+      - name: Smoke test endpoints
+        run: |
+          echo "=== GET /index.php (landing) ==="
+          code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8000/index.php)
+          echo "HTTP $code"; [ "$code" = "200" ]
+
+          echo "=== GET /auth/login.php (login page / DB connection) ==="
+          code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8000/auth/login.php)
+          echo "HTTP $code"; [ "$code" = "200" ]
+
+          echo "=== GET /dashboard/index.php (no session -> redirect) ==="
+          code=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8000/dashboard/index.php)
+          echo "HTTP $code"; [ "$code" = "302" ]
+
+          echo "=== All smoke tests passed ==="
+
+      - name: Show server log on failure
+        if: failure()
+        run: cat /tmp/php_server.log || true

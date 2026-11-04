@@ -236,32 +236,36 @@ $overdue = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS t FROM app
                 <?php endif; ?>
             </div>
         </div>
+        
 
-    </main>
-    
-    <?php
+        <?php
         // ── Chart data queries ────────────────────────────────────
 
         // Last 6 months patient registrations
         $patient_trend = mysqli_query($conn,
-            "SELECT DATE_FORMAT(created_at,'%b %Y') AS mo, COUNT(*) AS t
+            "SELECT 
+                DATE_FORMAT(created_at,'%Y-%m') AS grp,
+                DATE_FORMAT(MIN(created_at),'%b %Y') AS mo,
+                COUNT(*) AS t
             FROM patients
             WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
-            GROUP BY DATE_FORMAT(created_at,'%Y-%m')
-            ORDER BY MIN(created_at) ASC");
+            GROUP BY grp
+            ORDER BY grp ASC");
         $pt_labels = []; $pt_data = [];
         while ($r = mysqli_fetch_assoc($patient_trend)) { $pt_labels[] = $r['mo']; $pt_data[] = intval($r['t']); }
 
         // Last 6 months appointment status breakdown
         $appt_trend = mysqli_query($conn,
-            "SELECT DATE_FORMAT(appointment_date,'%b %Y') AS mo,
+            "SELECT 
+                    DATE_FORMAT(appointment_date,'%Y-%m') AS grp,
+                    DATE_FORMAT(MIN(appointment_date),'%b %Y') AS mo,
                     SUM(status='Completed') AS completed,
                     SUM(status='Missed') AS missed,
                     SUM(status='Pending') AS pending
             FROM appointments
             WHERE appointment_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
-            GROUP BY DATE_FORMAT(appointment_date,'%Y-%m')
-            ORDER BY MIN(appointment_date) ASC");
+            GROUP BY grp
+            ORDER BY grp ASC");
         $ap_labels = []; $ap_completed = []; $ap_missed = []; $ap_pending = [];
         while ($r = mysqli_fetch_assoc($appt_trend)) {
             $ap_labels[]    = $r['mo'];
@@ -372,6 +376,7 @@ $overdue = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS t FROM app
             <?php endif; ?>
         })();
         </script>
+    </main>
 
 </div>
 <?php include("../includes/footer.php"); ?>

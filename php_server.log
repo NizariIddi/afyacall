@@ -1,0 +1,187 @@
+[Wed Nov  4 23:59:28 2026] PHP 8.5.12 Development Server (http://127.0.0.1:8000) started
+[Wed Nov  4 23:59:36 2026] 127.0.0.1:33868 Accepted
+[Wed Nov  4 23:59:36 2026] 127.0.0.1:33868 [200]: GET /index.php
+[Wed Nov  4 23:59:36 2026] 127.0.0.1:33868 Closing
+[Wed Nov  4 23:59:36 2026] 127.0.0.1:33874 Accepted
+[Wed Nov  4 23:59:36 2026] 127.0.0.1:33874 [200]: GET /auth/login.php
+[Wed Nov  4 23:59:36 2026] 127.0.0.1:33874 Closing
+[Wed Nov  4 23:59:36 2026] 127.0.0.1:33876 Accepted
+[Wed Nov  4 23:59:36 2026] 127.0.0.1:33876 [302]: GET /dashboard/index.php
+[Wed Nov  4 23:59:36 2026] 127.0.0.1:33876 Closing
+[Wed Nov  4 23:59:42 2026] 127.0.0.1:40814 Accepted
+[Wed Nov  4 23:59:42 2026] 127.0.0.1:40814 [200]: GET /auth/login.php
+[Wed Nov  4 23:59:42 2026] 127.0.0.1:40814 Closing
+[Wed Nov  4 23:59:54 2026] 127.0.0.1:60992 Accepted
+[Wed Nov  4 23:59:54 2026] 127.0.0.1:60992 [200]: GET /auth/login.php
+[Wed Nov  4 23:59:54 2026] 127.0.0.1:60992 Closing
+[Wed Nov  4 23:59:59 2026] 127.0.0.1:55904 Accepted
+[Wed Nov  4 23:59:59 2026] 127.0.0.1:55904 [200]: GET /auth/login.php
+[Wed Nov  4 23:59:59 2026] 127.0.0.1:55904 Closing
+[Wed Nov  4 23:59:59 2026] 127.0.0.1:55912 Accepted
+[Thu Nov  5 00:00:00 2026] 127.0.0.1:55912 [302]: POST /auth/login.php
+[Thu Nov  5 00:00:00 2026] 127.0.0.1:55912 Closing
+[Thu Nov  5 00:00:00 2026] 127.0.0.1:55922 Accepted
+[Thu Nov  5 00:00:00 2026] 127.0.0.1:55922 [200]: GET /dashboard/index.php
+[Thu Nov  5 00:00:00 2026] 127.0.0.1:55922 Closing
+[Thu Nov  5 00:01:45 2026] 127.0.0.1:48514 Accepted
+[Thu Nov  5 00:01:45 2026] 127.0.0.1:48514 [200]: GET /
+[Thu Nov  5 00:01:45 2026] 127.0.0.1:48514 Closing
+[Thu Nov  5 00:01:45 2026] 127.0.0.1:48520 Accepted
+[Thu Nov  5 00:01:45 2026] 127.0.0.1:48520 [200]: GET /assets/images/afyacall-icon.svg
+[Thu Nov  5 00:01:45 2026] 127.0.0.1:48520 Closing
+[Thu Nov  5 00:01:54 2026] 127.0.0.1:40550 Accepted
+[Thu Nov  5 00:01:54 2026] 127.0.0.1:40550 [200]: GET /auth/login.php
+[Thu Nov  5 00:01:54 2026] 127.0.0.1:40550 Closing
+[Thu Nov  5 00:01:54 2026] 127.0.0.1:40564 Accepted
+[Thu Nov  5 00:01:54 2026] 127.0.0.1:40564 [200]: GET /assets/css/style.css
+[Thu Nov  5 00:01:54 2026] 127.0.0.1:40564 Closing
+[Thu Nov  5 00:01:57 2026] 127.0.0.1:40570 Accepted
+[Thu Nov  5 00:01:57 2026] 127.0.0.1:40570 [200]: GET /
+[Thu Nov  5 00:01:57 2026] 127.0.0.1:40570 Closing
+[Thu Nov  5 00:02:44 2026] 127.0.0.1:35574 Accepted
+[Thu Nov  5 00:02:44 2026] 127.0.0.1:35574 [200]: GET /auth/login.php
+[Thu Nov  5 00:02:44 2026] 127.0.0.1:35574 Closing
+[Thu Nov  5 00:02:44 2026] 127.0.0.1:35590 Accepted
+[Thu Nov  5 00:02:44 2026] 127.0.0.1:35590 [200]: GET /assets/css/style.css
+[Thu Nov  5 00:02:44 2026] 127.0.0.1:35590 Closing
+[Thu Nov  5 00:02:47 2026] 127.0.0.1:35598 Accepted
+[Thu Nov  5 00:02:47 2026] 127.0.0.1:35598 [200]: GET /
+[Thu Nov  5 00:02:47 2026] 127.0.0.1:35598 Closing
+[Thu Nov  5 00:02:52 2026] 127.0.0.1:59316 Accepted
+[Thu Nov  5 00:02:52 2026] 127.0.0.1:59316 [404]: GET /admin - No such file or directory
+[Thu Nov  5 00:02:52 2026] 127.0.0.1:59316 Closing
+[Thu Nov  5 00:02:52 2026] 127.0.0.1:59324 Accepted
+[Thu Nov  5 00:02:52 2026] 127.0.0.1:59324 [200]: GET /favicon.ico
+[Thu Nov  5 00:02:52 2026] 127.0.0.1:59324 Closing
+[Thu Nov  5 00:02:57 2026] 127.0.0.1:59330 Accepted
+[Thu Nov  5 00:02:57 2026] 127.0.0.1:59330 [404]: GET /admin/login - No such file or directory
+[Thu Nov  5 00:02:57 2026] 127.0.0.1:59330 Closing
+[Thu Nov  5 00:02:57 2026] 127.0.0.1:59336 Accepted
+[Thu Nov  5 00:02:57 2026] 127.0.0.1:59336 [200]: GET /favicon.ico
+[Thu Nov  5 00:02:57 2026] 127.0.0.1:59336 Closing
+[Thu Nov  5 00:04:01 2026] 127.0.0.1:53888 Accepted
+[Thu Nov  5 00:04:01 2026] 127.0.0.1:53888 [200]: GET /favicon.ico
+[Thu Nov  5 00:04:01 2026] 127.0.0.1:53888 Closing
+[Thu Nov  5 00:04:02 2026] 127.0.0.1:53892 Accepted
+[Thu Nov  5 00:04:02 2026] 127.0.0.1:53892 [200]: GET /
+[Thu Nov  5 00:04:02 2026] 127.0.0.1:53892 Closing
+[Thu Nov  5 00:04:05 2026] 127.0.0.1:53906 Accepted
+[Thu Nov  5 00:04:05 2026] 127.0.0.1:53906 [200]: GET /auth/login.php
+[Thu Nov  5 00:04:05 2026] 127.0.0.1:53906 Closing
+[Thu Nov  5 00:04:05 2026] 127.0.0.1:53922 Accepted
+[Thu Nov  5 00:04:05 2026] 127.0.0.1:53922 [200]: GET /assets/css/style.css
+[Thu Nov  5 00:04:05 2026] 127.0.0.1:53922 Closing
+[Thu Nov  5 00:04:58 2026] 127.0.0.1:53330 Accepted
+[Thu Nov  5 00:04:59 2026] 127.0.0.1:53330 [302]: POST /auth/login.php
+[Thu Nov  5 00:04:59 2026] 127.0.0.1:53330 Closing
+[Thu Nov  5 00:04:59 2026] 127.0.0.1:53334 Accepted
+[Thu Nov  5 00:04:59 2026] 127.0.0.1:53334 [200]: GET /dashboard/index.php
+[Thu Nov  5 00:04:59 2026] 127.0.0.1:53334 Closing
+[Thu Nov  5 00:04:59 2026] 127.0.0.1:53342 Accepted
+[Thu Nov  5 00:04:59 2026] 127.0.0.1:53342 [200]: GET /assets/css/style.css
+[Thu Nov  5 00:04:59 2026] 127.0.0.1:53342 Closing
+[Thu Nov  5 00:05:10 2026] 127.0.0.1:49112 Accepted
+[Thu Nov  5 00:05:10 2026] 127.0.0.1:49112 [200]: GET /ussd/view_logs.php
+[Thu Nov  5 00:05:10 2026] 127.0.0.1:49112 Closing
+[Thu Nov  5 00:05:10 2026] 127.0.0.1:49114 Accepted
+[Thu Nov  5 00:05:10 2026] 127.0.0.1:49114 [200]: GET /assets/css/style.css
+[Thu Nov  5 00:05:10 2026] 127.0.0.1:49114 Closing
+[Thu Nov  5 00:05:14 2026] 127.0.0.1:49120 Accepted
+[Thu Nov  5 00:05:14 2026] 127.0.0.1:49120 [200]: GET /ussd/ussd_simulator.php
+[Thu Nov  5 00:05:14 2026] 127.0.0.1:49120 Closing
+[Thu Nov  5 00:05:15 2026] 127.0.0.1:49128 Accepted
+[Thu Nov  5 00:05:15 2026] 127.0.0.1:49128 [200]: GET /assets/css/style.css
+[Thu Nov  5 00:05:15 2026] 127.0.0.1:49128 Closing
+[Thu Nov  5 00:05:15 2026] 127.0.0.1:49144 Accepted
+[Thu Nov  5 00:05:16 2026] 127.0.0.1:49144 [200]: POST /ussd/index.php
+[Thu Nov  5 00:05:16 2026] 127.0.0.1:49144 Closing
+[Thu Nov  5 00:05:26 2026] 127.0.0.1:47438 Accepted
+[Thu Nov  5 00:05:27 2026] 127.0.0.1:47438 [200]: POST /ussd/index.php
+[Thu Nov  5 00:05:27 2026] 127.0.0.1:47438 Closing
+[Thu Nov  5 00:05:31 2026] 127.0.0.1:47472 Accepted
+[Thu Nov  5 00:05:32 2026] 127.0.0.1:47472 [200]: POST /ussd/index.php
+[Thu Nov  5 00:05:32 2026] 127.0.0.1:47472 Closing
+[Thu Nov  5 00:05:39 2026] 127.0.0.1:34650 Accepted
+[Thu Nov  5 00:05:40 2026] 127.0.0.1:34650 [200]: POST /ussd/index.php
+[Thu Nov  5 00:05:40 2026] 127.0.0.1:34650 Closing
+[Thu Nov  5 00:05:48 2026] 127.0.0.1:36128 Accepted
+[Thu Nov  5 00:05:49 2026] 127.0.0.1:36128 [200]: POST /ussd/index.php
+[Thu Nov  5 00:05:49 2026] 127.0.0.1:36128 Closing
+[Thu Nov  5 00:05:58 2026] 127.0.0.1:49156 Accepted
+[Thu Nov  5 00:05:58 2026] 127.0.0.1:49156 [200]: GET /patients/view_patients.php
+[Thu Nov  5 00:05:58 2026] 127.0.0.1:49156 Closing
+[Thu Nov  5 00:05:58 2026] 127.0.0.1:49164 Accepted
+[Thu Nov  5 00:05:58 2026] 127.0.0.1:49164 [200]: GET /assets/css/style.css
+[Thu Nov  5 00:05:58 2026] 127.0.0.1:49164 Closing
+[Thu Nov  5 00:06:10 2026] 127.0.0.1:48000 Accepted
+[Thu Nov  5 00:06:10 2026] 127.0.0.1:48000 [200]: GET /ussd/menu_builder.php
+[Thu Nov  5 00:06:10 2026] 127.0.0.1:48000 Closing
+[Thu Nov  5 00:06:10 2026] 127.0.0.1:48004 Accepted
+[Thu Nov  5 00:06:10 2026] 127.0.0.1:48004 [200]: GET /assets/css/style.css
+[Thu Nov  5 00:06:10 2026] 127.0.0.1:48004 Closing
+[Thu Nov  5 00:06:12 2026] 127.0.0.1:48008 Accepted
+[Thu Nov  5 00:06:12 2026] 127.0.0.1:48008 [200]: GET /ussd/ussd_simulator.php
+[Thu Nov  5 00:06:12 2026] 127.0.0.1:48008 Closing
+[Thu Nov  5 00:06:12 2026] 127.0.0.1:48016 Accepted
+[Thu Nov  5 00:06:12 2026] 127.0.0.1:48016 [200]: GET /assets/css/style.css
+[Thu Nov  5 00:06:12 2026] 127.0.0.1:48016 Closing
+[Thu Nov  5 00:06:12 2026] 127.0.0.1:48024 Accepted
+[Thu Nov  5 00:06:12 2026] 127.0.0.1:48024 [200]: POST /ussd/index.php
+[Thu Nov  5 00:06:12 2026] 127.0.0.1:48024 Closing
+[Thu Nov  5 00:06:16 2026] 127.0.0.1:48032 Accepted
+[Thu Nov  5 00:06:16 2026] 127.0.0.1:48032 [200]: POST /ussd/index.php
+[Thu Nov  5 00:06:16 2026] 127.0.0.1:48032 Closing
+[Thu Nov  5 00:06:29 2026] 127.0.0.1:56394 Accepted
+[Thu Nov  5 00:06:29 2026] 127.0.0.1:56394 [200]: POST /ussd/index.php
+[Thu Nov  5 00:06:29 2026] 127.0.0.1:56394 Closing
+[Thu Nov  5 00:06:33 2026] 127.0.0.1:56404 Accepted
+[Thu Nov  5 00:06:33 2026] 127.0.0.1:56404 [200]: POST /ussd/index.php
+[Thu Nov  5 00:06:33 2026] 127.0.0.1:56404 Closing
+[Thu Nov  5 00:06:44 2026] 127.0.0.1:58434 Accepted
+[Thu Nov  5 00:06:44 2026] 127.0.0.1:58434 [200]: GET /ussd/ussd_simulator.php
+[Thu Nov  5 00:06:44 2026] 127.0.0.1:58434 Closing
+[Thu Nov  5 00:06:44 2026] 127.0.0.1:58440 Accepted
+[Thu Nov  5 00:06:44 2026] 127.0.0.1:58440 [200]: GET /assets/css/style.css
+[Thu Nov  5 00:06:44 2026] 127.0.0.1:58440 Closing
+[Thu Nov  5 00:06:44 2026] 127.0.0.1:58448 Accepted
+[Thu Nov  5 00:06:44 2026] 127.0.0.1:58448 [200]: POST /ussd/index.php
+[Thu Nov  5 00:06:44 2026] 127.0.0.1:58448 Closing
+[Thu Nov  5 00:06:47 2026] 127.0.0.1:58454 Accepted
+[Thu Nov  5 00:06:47 2026] 127.0.0.1:58454 [200]: GET /ussd/menu_builder.php
+[Thu Nov  5 00:06:47 2026] 127.0.0.1:58454 Closing
+[Thu Nov  5 00:06:47 2026] 127.0.0.1:58460 Accepted
+[Thu Nov  5 00:06:47 2026] 127.0.0.1:58460 [200]: GET /assets/css/style.css
+[Thu Nov  5 00:06:47 2026] 127.0.0.1:58460 Closing
+[Thu Nov  5 00:18:54 2026] 127.0.0.1:57970 Accepted
+[Thu Nov  5 00:18:54 2026] 127.0.0.1:57970 [200]: GET /appointments/view_appointments.php
+[Thu Nov  5 00:18:54 2026] 127.0.0.1:57970 Closing
+[Thu Nov  5 00:18:54 2026] 127.0.0.1:57984 Accepted
+[Thu Nov  5 00:18:54 2026] 127.0.0.1:57984 [200]: GET /assets/css/style.css
+[Thu Nov  5 00:18:54 2026] 127.0.0.1:57984 Closing
+[Thu Nov  5 00:19:00 2026] 127.0.0.1:43356 Accepted
+[Thu Nov  5 00:19:00 2026] 127.0.0.1:43356 [200]: GET /appointments/view_appointments.php?status=Pending
+[Thu Nov  5 00:19:00 2026] 127.0.0.1:43356 Closing
+[Thu Nov  5 00:19:00 2026] 127.0.0.1:43368 Accepted
+[Thu Nov  5 00:19:00 2026] 127.0.0.1:43368 [200]: GET /assets/css/style.css
+[Thu Nov  5 00:19:00 2026] 127.0.0.1:43368 Closing
+[Thu Nov  5 00:19:02 2026] 127.0.0.1:43380 Accepted
+[Thu Nov  5 00:19:02 2026] 127.0.0.1:43380 [200]: GET /appointments/view_appointments.php?status=
+[Thu Nov  5 00:19:02 2026] 127.0.0.1:43380 Closing
+[Thu Nov  5 00:19:02 2026] 127.0.0.1:43392 Accepted
+[Thu Nov  5 00:19:02 2026] 127.0.0.1:43392 [200]: GET /assets/css/style.css
+[Thu Nov  5 00:19:02 2026] 127.0.0.1:43392 Closing
+[Thu Nov  5 00:19:07 2026] 127.0.0.1:43408 Accepted
+[Thu Nov  5 00:19:07 2026] 127.0.0.1:43408 [200]: GET /patients/view_patient.php?id=1
+[Thu Nov  5 00:19:07 2026] 127.0.0.1:43408 Closing
+[Thu Nov  5 00:19:07 2026] 127.0.0.1:43414 Accepted
+[Thu Nov  5 00:19:07 2026] 127.0.0.1:43414 [200]: GET /assets/css/style.css
+[Thu Nov  5 00:19:07 2026] 127.0.0.1:43414 Closing
+[Thu Nov  5 00:20:16 2026] 127.0.0.1:51930 Accepted
+[Thu Nov  5 00:20:16 2026] 127.0.0.1:51930 [200]: GET /medical_records/patient_history.php?id=1
+[Thu Nov  5 00:20:16 2026] 127.0.0.1:51930 Closing
+[Thu Nov  5 00:20:17 2026] 127.0.0.1:51936 Accepted
+[Thu Nov  5 00:20:17 2026] 127.0.0.1:51936 [200]: GET /assets/css/style.css
+[Thu Nov  5 00:20:17 2026] 127.0.0.1:51936 Closing
+[Thu Nov  5 00:20:28 2026] 127.0.0.1:34934 Accepted
+[Thu Nov  5 00:20:28 2026] 127.0.0.1:34934 [200]: GET /patients/view_patient.php?id=1
+[Thu Nov  5 00:20:28 2026] 127.0.0.1:34934 Closing
