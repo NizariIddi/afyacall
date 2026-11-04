@@ -26,19 +26,19 @@ jobs:
           MARIADB_DATABASE: afyacall
         ports:
           - 3306:3306
-        options: >-
-          --health-cmd "healthcheck.sh --connect --innodb_initialized"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 30
-          --health-start-period 30s
 
     steps:
       # 1. Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Set up PHP
+      # 2. Install MariaDB client
+      - name: Install MariaDB client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mariadb-client
+
+      # 3. Set up PHP
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -46,36 +46,46 @@ jobs:
           extensions: mysqli, pdo_mysql
           coverage: none
 
-      # 3. Verify PHP installation
+      # 4. Verify PHP
       - name: Verify PHP version and extensions
         run: |
           php -v
           php -m | grep -Ei 'mysqli|pdo_mysql'
 
-      # 4. Wait for MariaDB and import database schema
-      - name: Wait for MariaDB and import schema
+      # 5. Wait for MariaDB
+      - name: Wait for MariaDB
         run: |
+          set -e
+
           for i in $(seq 1 60); do
-            if mysqladmin ping \
+            if mysql \
+              --connect-timeout=2 \
               -h "$DB_HOST" \
               -P "$DB_PORT" \
               -u "$DB_USER" \
               --password="$DB_PASSWORD" \
-              --silent 2>/dev/null; then
-              echo "MariaDB is ready"
-              break
-            fi
+              -e "SELECT 1;" 2>/dev/null; then
 
-            if [ "$i" -eq 60 ]; then
-              echo "MariaDB failed to become ready"
-              exit 1
+              echo "MariaDB is ready!"
+              exit 0
             fi
 
             echo "Waiting for MariaDB... ($i/60)"
             sleep 2
           done
 
-          echo "Importing database schema..."
+          echo "MariaDB failed to become ready"
+          exit 1
+
+      # 6. Import database schema
+      - name: Import database schema
+        run: |
+          set -e
+
+          if [ ! -f database.sql ]; then
+            echo "database.sql not found!"
+            exit 1
+          fi
 
           mysql \
             -h "$DB_HOST" \
@@ -84,7 +94,7 @@ jobs:
             --password="$DB_PASSWORD" \
             "$DB_NAME" < database.sql
 
-          echo "Verifying database tables..."
+          echo "Database imported successfully!"
 
           mysql \
             -h "$DB_HOST" \
@@ -94,24 +104,25 @@ jobs:
             "$DB_NAME" \
             -e "SHOW TABLES;"
 
-          echo "Database setup completed successfully"
-
-      # 5. Lint all PHP files
+      # 7. PHP syntax validation
       - name: PHP syntax check
         run: |
-          find . -name '*.php' \
-            -not -path './vendor/*' \
-            -print0 | \
-            xargs -0 -I{} sh -c '
-              php -l "$1" > /dev/null || {
-                echo "Lint failed: $1"
-                exit 1
-              }
-            ' _ {}
+          set -e
 
-          echo "All PHP files pass syntax checks"
+          while IFS= read -r -d '' file; do
+            if ! php -l "$file"; then
+              echo "PHP syntax error: $file"
+              exit 1
+            fi
+          done < <(
+            find . -name '*.php' \
+              -not -path './vendor/*' \
+              -print0
+          )
 
-      # 6. Start PHP built-in server
+          echo "All PHP files pass syntax checks!"
+
+      # 8. Start PHP server
       - name: Start PHP built-in server
         run: |
           php -S 127.0.0.1:8000 -t . \
@@ -120,26 +131,27 @@ jobs:
           echo $! > /tmp/php_server.pid
 
           for i in $(seq 1 10); do
-            if curl -s http://127.0.0.1:8000/index.php > /dev/null; then
-              echo "PHP server is running"
-              break
-            fi
+            if curl -s \
+              http://127.0.0.1:8000/index.php \
+              > /dev/null; then
 
-            if [ "$i" -eq 10 ]; then
-              echo "PHP server failed to start"
-              cat /tmp/php_server.log
-              exit 1
+              echo "PHP server is running!"
+              exit 0
             fi
 
             sleep 1
           done
 
-      # 7. Test application endpoints
+          echo "PHP server failed to start"
+          cat /tmp/php_server.log
+          exit 1
+
+      # 9. Smoke tests
       - name: Smoke test endpoints
         run: |
           set -e
 
-          echo "=== GET /index.php (landing page) ==="
+          echo "=== Landing page ==="
 
           code=$(curl -s -o /dev/null \
             -w "%{http_code}" \
@@ -148,7 +160,7 @@ jobs:
           echo "HTTP $code"
           [ "$code" = "200" ]
 
-          echo "=== GET /auth/login.php (login page) ==="
+          echo "=== Login page ==="
 
           code=$(curl -s -o /dev/null \
             -w "%{http_code}" \
@@ -157,7 +169,7 @@ jobs:
           echo "HTTP $code"
           [ "$code" = "200" ]
 
-          echo "=== GET /dashboard/index.php (unauthenticated redirect) ==="
+          echo "=== Dashboard authentication ==="
 
           code=$(curl -s -o /dev/null \
             -w "%{http_code}" \
@@ -168,9 +180,12 @@ jobs:
 
           echo "All smoke tests passed!"
 
-      # 8. Display server logs if something fails
-      - name: Show server log on failure
+      # 10. Logs on failure
+      - name: Show logs on failure
         if: failure()
         run: |
           echo "=== PHP Server Logs ==="
           cat /tmp/php_server.log || true
+
+          echo "=== MariaDB Container Logs ==="
+          docker ps -a
