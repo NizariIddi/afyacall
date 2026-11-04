@@ -151,32 +151,37 @@ jobs:
         run: |
           set -e
 
-          echo "=== Landing page ==="
+          check_endpoint() {
+            name="$1"
+            url="$2"
+            expected="$3"
 
-          code=$(curl -s -o /dev/null \
-            -w "%{http_code}" \
-            http://127.0.0.1:8000/index.php)
+            echo "=== $name ==="
 
-          echo "HTTP $code"
-          [ "$code" = "200" ]
+            code=$(curl -s -o "/tmp/response.html" \
+              -w "%{http_code}" "$url")
 
-          echo "=== Login page ==="
+            echo "HTTP $code"
 
-          code=$(curl -s -o /dev/null \
-            -w "%{http_code}" \
-            http://127.0.0.1:8000/auth/login.php)
+            if [ "$code" != "$expected" ]; then
+              echo "Expected HTTP $expected but received $code"
+              echo "=== Response body ==="
+              cat /tmp/response.html
+              echo ""
+              echo "=== PHP Server Logs ==="
+              cat /tmp/php_server.log
+              exit 1
+            fi
+          }
 
-          echo "HTTP $code"
-          [ "$code" = "200" ]
+          check_endpoint "Landing page" \
+            "http://127.0.0.1:8000/index.php" 200
 
-          echo "=== Dashboard authentication ==="
+          check_endpoint "Login page" \
+            "http://127.0.0.1:8000/auth/login.php" 200
 
-          code=$(curl -s -o /dev/null \
-            -w "%{http_code}" \
-            http://127.0.0.1:8000/dashboard/index.php)
-
-          echo "HTTP $code"
-          [ "$code" = "302" ]
+          check_endpoint "Dashboard authentication" \
+            "http://127.0.0.1:8000/dashboard/index.php" 302
 
           echo "All smoke tests passed!"
 
