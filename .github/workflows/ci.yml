@@ -24,10 +24,10 @@ jobs:
           MARIADB_ROOT_PASSWORD: rootpass
           MARIADB_DATABASE: afyacall
         options: >-
-          --health-cmd "mysqladmin ping -h 127.0.0.1 -P 3306 -p rootpass --silent"
-          --health-interval 10s
+          --health-cmd "mysqladmin ping --silent"
+          --health-interval 5s
           --health-timeout 5s
-          --health-retries 20
+          --health-retries 30
         ports:
           - 3306:3306
 
@@ -47,14 +47,14 @@ jobs:
           php -v
           php -m | grep -Ei 'mysqli|pdo_mysql'
 
-      - name: Wait for MariaDB and create database
+      - name: Wait for MariaDB and import schema
         run: |
-          for i in $(seq 1 30); do
+          for i in $(seq 1 60); do
             if mysqladmin ping -h 127.0.0.1 -P 3306 -u root -p rootpass --silent 2>/dev/null; then
               echo "MariaDB is ready"
               break
             fi
-            echo "Waiting for MariaDB... ($i/30)"
+            echo "Waiting for MariaDB... ($i/60)"
             sleep 2
           done
           mysql -h 127.0.0.1 -P 3306 -u root -p rootpass -e "CREATE DATABASE IF NOT EXISTS afyacall CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"
